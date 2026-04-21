@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project Gallery | Fresno Cabinet Company</title>
+  <meta name="description" content="Project gallery of cabinet work, cabinet finishes, kitchens, built-ins, and cabinet design inspiration from Fresno Cabinet Company." />
+  <meta name="keywords" content="cabinet gallery Fresno, project gallery Fresno, kitchen cabinet gallery Fresno" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://fresnocabinetcompany.com/gallery.html" />
+  <meta property="og:title" content="Project Gallery | Fresno Cabinet Company" />
+  <meta property="og:description" content="Project gallery of cabinet work, cabinet finishes, kitchens, built-ins, and cabinet design inspiration from Fresno Cabinet Company." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://fresnocabinetcompany.com/gallery.html" />
+  <meta property="og:image" content="https://fresnocabinetcompany.com/assets/gallery/full/project-01.jpg" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+<header class="header">
+  <div class="container nav">
+    <a class="brand" href="index.html">
+      Fresno Cabinet Company
+      <span>Est. 2021 • Fresno, CA</span>
+    </a>
+    <nav class="links" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <div class="dropdown">
+        <a class="dropdown-toggle" href="kitchen-cabinets.html">Cabinets</a>
+        <div class="dropdown-menu" aria-label="Cabinet pages">
+          <a href="kitchen-cabinets.html">Kitchen Cabinets<span>Full kitchen packages</span></a>
+          <a href="adu-packages.html">ADU Cabinets<span>Compact kitchens and guest spaces</span></a>
+          <a href="built-in-cabinets.html">Built-In Cabinets<span>Storage, media walls, office, and more</span></a>
+          <a href="in-home-design.html">Custom Design Help<span>Layouts, drawers, shelves, and options</span></a>
+        </div>
+      </div>
+      <a href="in-home-design.html">In-Home Design</a>
+      <a href="gallery.html" aria-current="page">Gallery</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a class="btn btn-primary" href="contact.html">Get a Quote</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero center">
+    <div class="container">
+      <h1>Project Gallery</h1>
+    </div>
+  </section>
+
+  <section class="gallery-section">
+    <div class="container">
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+  </section>
+
+  <section class="source-band">
+    <div class="container">
+      <h2>See something you like?</h2>
+      <p>Use the gallery as a starting point for your free consultation.</p>
+      <a class="btn btn-light" href="contact.html">Start a Free Consultation</a>
+    </div>
+  </section>
+</main>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button type="button" id="lightboxClose" aria-label="Close image">×</button>
+  <img id="lightboxImage" src="" alt="Expanded gallery image" />
+</div>
+
+<script>
+  const galleryFiles = [
+      "project-01.jpg",
+      "project-02.jpg",
+      "project-03.jpg",
+      "project-04.jpg",
+      "project-05.jpg",
+      "project-06.jpg",
+      "project-07.jpg",
+      "project-08.jpg",
+      "project-09.jpg",
+      "project-10.jpg",
+      "project-11.jpg",
+      "project-12.jpg",
+      "project-13.jpg",
+      "project-14.jpg",
+      "project-15.jpg",
+      "project-16.jpg",
+      "project-17.jpg",
+      "project-18.jpg",
+      "project-19.jpg",
+      "project-20.jpg",
+      "project-21.jpg",
+      "project-22.jpg",
+      "project-23.jpg",
+      "project-24.jpg",
+      "project-25.jpg",
+      "project-26.jpg",
+      "project-27.jpg",
+      "project-28.jpg",
+      "project-29.jpg",
+      "project-30.jpg",
+      "project-31.jpg",
+      "project-32.jpg",
+      "project-33.jpg",
+      "project-34.jpg",
+      "project-35.jpg",
+      "project-36.jpg"
+  ];
+
+  const galleryGrid = document.getElementById('galleryGrid');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImage = document.getElementById('lightboxImage');
+  const lightboxClose = document.getElementById('lightboxClose');
+
+  galleryFiles.forEach(file => {
+    const card = document.createElement('article');
+    card.className = 'gallery-card';
+    const full = `assets/gallery/full/${file}`;
+    const thumb = `assets/gallery/thumbs/${file}`;
+
+    const img = document.createElement('img');
+    img.src = thumb;
+    img.alt = 'Cabinet project gallery photo';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+
+    card.appendChild(img);
+    card.addEventListener('click', () => {
+      lightboxImage.src = full;
+      lightboxImage.alt = img.alt;
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden', 'false');
+    });
+    galleryGrid.appendChild(card);
+  });
+
+  lightboxClose.addEventListener('click', () => {
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    lightboxImage.src = '';
+  });
+
+  lightbox.addEventListener('click', event => {
+    if (event.target === lightbox) {
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxImage.src = '';
+    }
+  });
+</script>
+
+<footer>
+  <div class="container footer-inner">
+    <div><strong>Fresno Cabinet Company</strong> — Est. 2021 in Fresno, CA.</div>
+    <div><a href="mailto:info@fresnocabinetcompany.com">info@fresnocabinetcompany.com</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
