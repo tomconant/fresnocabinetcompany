@@ -57,8 +57,8 @@
 <form action="mailto:info@fresnocabinetcompany.com" method="post" enctype="text/plain">
   <label>Name<input name="name" autocomplete="name" required /></label>
   <label>Email<input type="email" name="email" autocomplete="email" required /></label>
-  <label>Phone<input name="phone" autocomplete="tel" /></label>
-  <label>Message<textarea name="message" placeholder="Tell us about your project."></textarea></label>
+  <label>Phone <span style="font-weight:500;color:var(--muted);">optional</span><input name="phone" autocomplete="tel" /></label>
+  <label>Project Details<textarea name="message" placeholder="Tell us about your project." required></textarea></label>
   <button class="btn btn-primary" type="submit">Submit</button>
 </form>
 
