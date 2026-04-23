@@ -14,6 +14,41 @@
   <meta property="og:url" content="https://fresnocabinetcompany.com/contact.html" />
   <meta property="og:image" content="https://fresnocabinetcompany.com/assets/img/home-hero.jpg" />
   <link rel="stylesheet" href="assets/css/styles.css" />
+
+  <!-- Google tag (gtag.js) -->
+  <!-- Replace GA4_MEASUREMENT_ID here if needed -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA4_MEASUREMENT_ID"></script>
+  <script src="shared/tracking.js" defer></script>
+
+  <style>
+    .form-status {
+      margin-top: 14px;
+      font-size: .95rem;
+      color: var(--muted, #696156);
+      min-height: 1.4em;
+    }
+    .form-status.is-error {
+      color: #8a3b2e;
+    }
+    .field-error {
+      display: block;
+      margin-top: 6px;
+      font-size: .85rem;
+      color: #8a3b2e;
+    }
+    .hp-field {
+      position: absolute !important;
+      left: -9999px !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      height: 0 !important;
+      overflow: hidden !important;
+    }
+    .btn[disabled] {
+      opacity: .7;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
 
@@ -38,7 +73,7 @@
       <a href="gallery.html">Gallery</a>
       <a href="contact.html" aria-current="page">Contact</a>
     </nav>
-    <a class="btn btn-primary" href="contact.html">Get a Quote</a>
+    <a class="btn btn-primary js-track-consultation" data-track-location="contact_header" href="contact.html">Get a Quote</a>
   </div>
 </header>
 
@@ -53,15 +88,44 @@
   <section class="contact-section">
     <div class="container contact-grid">
       <section class="form-card" id="form">
-        
-<form action="mailto:info@fresnocabinetcompany.com" method="post" enctype="text/plain">
-  <label>Name<input name="name" autocomplete="name" required /></label>
-  <label>Email<input type="email" name="email" autocomplete="email" required /></label>
-  <label>Phone <span style="font-weight:500;color:var(--muted);">optional</span><input name="phone" autocomplete="tel" /></label>
-  <label>Project Details<textarea name="message" placeholder="Tell us about your project." required></textarea></label>
-  <button class="btn btn-primary" type="submit">Submit</button>
-</form>
+        <form id="consultationForm" method="post" action="FORM_ENDPOINT_HERE" novalidate>
+          <label>
+            Name
+            <input id="name" name="name" autocomplete="name" required />
+            <span class="field-error" id="nameError" aria-live="polite"></span>
+          </label>
 
+          <label>
+            Email
+            <input id="email" type="email" name="email" autocomplete="email" required />
+            <span class="field-error" id="emailError" aria-live="polite"></span>
+          </label>
+
+          <label>
+            Phone
+            <input id="phone" name="phone" autocomplete="tel" required />
+            <span class="field-error" id="phoneError" aria-live="polite"></span>
+          </label>
+
+          <label>
+            Message
+            <textarea id="message" name="message" placeholder="Tell us about your project." required></textarea>
+            <span class="field-error" id="messageError" aria-live="polite"></span>
+          </label>
+
+          <div class="hp-field" aria-hidden="true">
+            <label>
+              Website
+              <input type="text" name="website" tabindex="-1" autocomplete="off" />
+            </label>
+          </div>
+
+          <input type="hidden" name="_subject" value="New Fresno Cabinet Company consultation request" />
+          <input type="hidden" name="source_page" value="contact.html" />
+
+          <button class="btn btn-primary js-track-consultation" data-track-location="contact_form_submit" type="submit" id="submitButton">Submit</button>
+          <p class="form-status" id="formStatus" aria-live="polite"></p>
+        </form>
       </section>
     </div>
   </section>
@@ -70,9 +134,116 @@
 <footer>
   <div class="container footer-inner">
     <div><strong>Fresno Cabinet Company</strong> — Est. 2021 in Fresno, CA.</div>
-    <div><a href="mailto:info@fresnocabinetcompany.com">info@fresnocabinetcompany.com</a></div>
+    <div><a href="mailto:info@fresnocabinetcompany.com" class="js-track-email">info@fresnocabinetcompany.com</a></div>
   </div>
 </footer>
 
+<script>
+  const FORM_ENDPOINT = 'FORM_ENDPOINT_HERE';
+  const THANK_YOU_URL = '/thank-you.html';
+
+  const form = document.getElementById('consultationForm');
+  const submitButton = document.getElementById('submitButton');
+  const formStatus = document.getElementById('formStatus');
+
+  const fields = {
+    name: document.getElementById('name'),
+    email: document.getElementById('email'),
+    phone: document.getElementById('phone'),
+    message: document.getElementById('message')
+  };
+
+  const errors = {
+    name: document.getElementById('nameError'),
+    email: document.getElementById('emailError'),
+    phone: document.getElementById('phoneError'),
+    message: document.getElementById('messageError')
+  };
+
+  function clearErrors() {
+    Object.values(errors).forEach(el => el.textContent = '');
+    formStatus.textContent = '';
+    formStatus.classList.remove('is-error');
+  }
+
+  function validateEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+  }
+
+  function validatePhone(value) {
+    const digits = value.replace(/\D/g, '');
+    return digits.length >= 10;
+  }
+
+  function validateForm() {
+    clearErrors();
+    let valid = true;
+
+    if (!fields.name.value.trim()) {
+      errors.name.textContent = 'Please enter your name.';
+      valid = false;
+    }
+
+    if (!fields.email.value.trim()) {
+      errors.email.textContent = 'Please enter your email.';
+      valid = false;
+    } else if (!validateEmail(fields.email.value)) {
+      errors.email.textContent = 'Please enter a valid email address.';
+      valid = false;
+    }
+
+    if (!fields.phone.value.trim()) {
+      errors.phone.textContent = 'Please enter your phone number.';
+      valid = false;
+    } else if (!validatePhone(fields.phone.value)) {
+      errors.phone.textContent = 'Please enter a valid phone number.';
+      valid = false;
+    }
+
+    if (!fields.message.value.trim()) {
+      errors.message.textContent = 'Please tell us about your project.';
+      valid = false;
+    }
+
+    return valid;
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    if (!validateForm()) return;
+
+    const formData = new FormData(form);
+
+    if ((formData.get('website') || '').trim() !== '') {
+      formStatus.textContent = 'Unable to submit right now.';
+      formStatus.classList.add('is-error');
+      return;
+    }
+
+    submitButton.disabled = true;
+    formStatus.textContent = 'Sending your request...';
+
+    try {
+      const response = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json'
+        },
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Submission failed');
+      }
+
+      window.location.href = THANK_YOU_URL;
+    } catch (error) {
+      formStatus.textContent = 'There was a problem sending your request. Please try again.';
+      formStatus.classList.add('is-error');
+      submitButton.disabled = false;
+    }
+  });
+</script>
 </body>
 </html>

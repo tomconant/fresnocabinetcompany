@@ -35,6 +35,11 @@
   }
   </script>
 
+  <!-- Google tag (gtag.js) -->
+  <!-- Replace GA4_MEASUREMENT_ID here if needed -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA4_MEASUREMENT_ID"></script>
+  <script src="shared/tracking.js" defer></script>
+
   <style>
     :root {
       --ink: #171410;
@@ -190,6 +195,11 @@
       background: #fff7e9;
       color: var(--charcoal);
       box-shadow: 0 10px 26px rgba(0,0,0,.18);
+    }
+    .btn[disabled] {
+      opacity: .72;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .hero { padding: 54px 0 72px; }
@@ -449,6 +459,28 @@
       box-shadow: 0 0 0 4px rgba(154,106,67,.14);
     }
     textarea { min-height: 108px; resize: vertical; }
+    .field-error {
+      display: block;
+      margin-top: 4px;
+      font-size: .84rem;
+      color: #8a3b2e;
+      font-weight: 700;
+    }
+    .form-status {
+      margin: 2px 0 0;
+      font-size: .95rem;
+      color: var(--muted);
+      min-height: 1.4em;
+    }
+    .form-status.is-error { color: #8a3b2e; }
+    .hp-field {
+      position: absolute !important;
+      left: -9999px !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      height: 0 !important;
+      overflow: hidden !important;
+    }
 
     footer {
       background: #100d0a;
@@ -591,7 +623,7 @@
         <a href="gallery.html">Gallery</a>
         <a href="#quote">Contact</a>
       </nav>
-      <a class="btn btn-primary" href="#quote">Get a Quote</a>
+      <a class="btn btn-primary js-track-consultation" data-track-location="index_header" href="#quote">Get a Quote</a>
     </div>
   </header>
 
@@ -602,7 +634,7 @@
           <h1>Designer cabinets. Smarter pricing.</h1>
           <p>Designer-style cabinet packages for Fresno kitchens, ADUs, investment properties, and contractor projects. Schedule a free consultation and custom design quote.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#quote">Free Consultation</a>
+            <a class="btn btn-primary js-track-consultation" data-track-location="index_hero" href="#quote">Free Consultation</a>
             <a class="btn btn-outline" href="#packages">View Cabinets</a>
           </div>
           <div class="proof-line">
@@ -697,16 +729,30 @@
             <p>Tell us about your kitchen, or invite us out for a free consultation. We’ll help turn the space into a cabinet design that feels right for your home.</p>
           </div>
 
-          <form action="mailto:info@fresnocabinetcompany.com" method="post" enctype="text/plain">
+          <form id="homeQuoteForm" method="post" action="FORM_ENDPOINT_HERE" novalidate>
             <div class="form-row">
-              <label>Name<input name="name" autocomplete="name" required /></label>
-              <label>Phone <span style="font-weight:500;color:var(--muted);">optional</span><input name="phone" autocomplete="tel" /></label>
+              <label>
+                Name
+                <input id="name" name="name" autocomplete="name" required />
+                <span class="field-error" id="nameError" aria-live="polite"></span>
+              </label>
+              <label>
+                Phone <span style="font-weight:500;color:var(--muted);">optional</span>
+                <input id="phone" name="phone" autocomplete="tel" />
+                <span class="field-error" id="phoneError" aria-live="polite"></span>
+              </label>
             </div>
-            <label>Email<input type="email" name="email" autocomplete="email" required /></label>
+
+            <label>
+              Email
+              <input id="email" type="email" name="email" autocomplete="email" required />
+              <span class="field-error" id="emailError" aria-live="polite"></span>
+            </label>
+
             <div class="form-row">
               <label>
                 Project Type
-                <select name="project_type">
+                <select id="project_type" name="project_type" required>
                   <option value="">Select one</option>
                   <option>Kitchen remodel</option>
                   <option>ADU / guest house</option>
@@ -715,11 +761,33 @@
                   <option>Free in-home consultation</option>
                   <option>Other</option>
                 </select>
+                <span class="field-error" id="projectTypeError" aria-live="polite"></span>
               </label>
-              <label>Project Location<input name="location" placeholder="Fresno, Clovis, Madera..." /></label>
+              <label>
+                Project Location
+                <input id="location" name="location" placeholder="Fresno, Clovis, Madera..." required />
+                <span class="field-error" id="locationError" aria-live="polite"></span>
+              </label>
             </div>
-            <label>Project Details<textarea name="message" placeholder="Tell us what you need. Photos, plans, rough measurements, or a free consultation request all work." required></textarea></label>
-            <button class="btn btn-primary" type="submit">Send Quote Request</button>
+
+            <label>
+              Project Details
+              <textarea id="message" name="message" placeholder="Tell us what you need. Photos, plans, rough measurements, or a free consultation request all work." required></textarea>
+              <span class="field-error" id="messageError" aria-live="polite"></span>
+            </label>
+
+            <div class="hp-field" aria-hidden="true">
+              <label>
+                Website
+                <input type="text" name="website" tabindex="-1" autocomplete="off" />
+              </label>
+            </div>
+
+            <input type="hidden" name="_subject" value="New Fresno Cabinet Company homepage quote request" />
+            <input type="hidden" name="source_page" value="index.html" />
+
+            <button class="btn btn-primary js-track-consultation" data-track-location="index_quote_form_submit" type="submit" id="submitButton">Send Quote Request</button>
+            <p class="form-status" id="formStatus" aria-live="polite"></p>
           </form>
         </div>
       </div>
@@ -729,8 +797,128 @@
   <footer>
     <div class="container footer-inner">
       <div><strong>Fresno Cabinet Company</strong> — Est. 2021 in Fresno, CA.</div>
-      <div><a href="mailto:info@fresnocabinetcompany.com">info@fresnocabinetcompany.com</a></div>
+      <div><a href="mailto:info@fresnocabinetcompany.com" class="js-track-email">info@fresnocabinetcompany.com</a></div>
     </div>
   </footer>
+
+  <script>
+    const FORM_ENDPOINT = 'FORM_ENDPOINT_HERE';
+    const THANK_YOU_URL = '/thank-you.html';
+
+    const form = document.getElementById('homeQuoteForm');
+    const submitButton = document.getElementById('submitButton');
+    const formStatus = document.getElementById('formStatus');
+
+    const fields = {
+      name: document.getElementById('name'),
+      phone: document.getElementById('phone'),
+      email: document.getElementById('email'),
+      project_type: document.getElementById('project_type'),
+      location: document.getElementById('location'),
+      message: document.getElementById('message')
+    };
+
+    const errors = {
+      name: document.getElementById('nameError'),
+      phone: document.getElementById('phoneError'),
+      email: document.getElementById('emailError'),
+      project_type: document.getElementById('projectTypeError'),
+      location: document.getElementById('locationError'),
+      message: document.getElementById('messageError')
+    };
+
+    function clearErrors() {
+      Object.values(errors).forEach(el => el.textContent = '');
+      formStatus.textContent = '';
+      formStatus.classList.remove('is-error');
+    }
+
+    function validateEmail(value) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+    }
+
+    function validatePhone(value) {
+      if (!value.trim()) return true;
+      const digits = value.replace(/\D/g, '');
+      return digits.length >= 10;
+    }
+
+    function validateForm() {
+      clearErrors();
+      let valid = true;
+
+      if (!fields.name.value.trim()) {
+        errors.name.textContent = 'Please enter your name.';
+        valid = false;
+      }
+
+      if (!fields.email.value.trim()) {
+        errors.email.textContent = 'Please enter your email.';
+        valid = false;
+      } else if (!validateEmail(fields.email.value)) {
+        errors.email.textContent = 'Please enter a valid email address.';
+        valid = false;
+      }
+
+      if (!validatePhone(fields.phone.value)) {
+        errors.phone.textContent = 'Please enter a valid phone number.';
+        valid = false;
+      }
+
+      if (!fields.project_type.value.trim()) {
+        errors.project_type.textContent = 'Please select a project type.';
+        valid = false;
+      }
+
+      if (!fields.location.value.trim()) {
+        errors.location.textContent = 'Please enter the project location.';
+        valid = false;
+      }
+
+      if (!fields.message.value.trim()) {
+        errors.message.textContent = 'Please tell us a little about your project.';
+        valid = false;
+      }
+
+      return valid;
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      if (!validateForm()) return;
+
+      const formData = new FormData(form);
+
+      if ((formData.get('website') || '').trim() !== '') {
+        formStatus.textContent = 'Unable to submit right now.';
+        formStatus.classList.add('is-error');
+        return;
+      }
+
+      submitButton.disabled = true;
+      formStatus.textContent = 'Sending your request...';
+
+      try {
+        const response = await fetch(FORM_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json'
+          },
+          body: formData
+        });
+
+        if (!response.ok) {
+          throw new Error('Submission failed');
+        }
+
+        window.location.href = THANK_YOU_URL;
+      } catch (error) {
+        formStatus.textContent = 'There was a problem sending your request. Please try again.';
+        formStatus.classList.add('is-error');
+        submitButton.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
