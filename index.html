@@ -3,143 +3,734 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fresno Cabinet Company | Kitchen Cabinets &amp; Design Help</title>
-  <meta name="description" content="Designer-style cabinet packages, free consultation, and custom design help for kitchens, ADUs, built-ins, and cabinet projects in Fresno." />
-  <meta name="keywords" content="Fresno cabinets, kitchen cabinets Fresno, cabinet quote Fresno" />
+
+  <title>Kitchen Cabinets Fresno | Fresno Cabinet Company</title>
+  <meta name="description" content="Designer-style kitchen cabinets in Fresno with a refined custom look, free consultation, custom design help, and smart cabinet package pricing." />
+  <meta name="keywords" content="kitchen cabinets Fresno, Fresno cabinets, cabinet packages Fresno, ADU cabinets Fresno, built in cabinets Fresno" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://fresnocabinetcompany.com/" />
-  <meta property="og:title" content="Fresno Cabinet Company | Kitchen Cabinets &amp; Design Help" />
-  <meta property="og:description" content="Designer-style cabinet packages, free consultation, and custom design help for kitchens, ADUs, built-ins, and cabinet projects in Fresno." />
+
+  <meta property="og:title" content="Kitchen Cabinets Fresno | Fresno Cabinet Company" />
+  <meta property="og:description" content="Designer-style cabinet packages with a refined custom look, free consultation, and smart pricing." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://fresnocabinetcompany.com/" />
   <meta property="og:image" content="https://fresnocabinetcompany.com/assets/img/home-hero.jpg" />
-  <link rel="stylesheet" href="assets/css/styles.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
+    "name": "Fresno Cabinet Company",
+    "url": "https://fresnocabinetcompany.com/",
+    "image": "https://fresnocabinetcompany.com/assets/img/home-hero.jpg",
+    "description": "Fresno Cabinet Company supplies designer-style kitchen cabinet packages for Fresno homes, ADUs, investment properties, and contractor projects.",
+    "email": "info@fresnocabinetcompany.com",
+    "areaServed": ["Fresno, CA", "Clovis, CA", "Madera, CA", "Sanger, CA", "Central Valley, CA"],
+    "priceRange": "$$",
+    "makesOffer": [
+      {"@type": "Offer", "name": "Kitchen Cabinet Packages"},
+      {"@type": "Offer", "name": "ADU Cabinet Packages"},
+      {"@type": "Offer", "name": "Free In-Home Cabinet Design Consultation"}
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --ink: #171410;
+      --muted: #696156;
+      --cream: #fbf7ef;
+      --paper: #fffdf8;
+      --line: #e5d9c8;
+      --taupe: #9a6a43;
+      --taupe-dark: #6c472a;
+      --charcoal: #171410;
+      --shadow: 0 28px 80px rgba(32, 24, 16, .16);
+      --radius: 28px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--cream);
+      line-height: 1.5;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    .container { width: min(var(--max), calc(100% - 36px)); margin: 0 auto; }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(251,247,239,.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(229,217,200,.75);
+    }
+    .nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand {
+      font-weight: 900;
+      letter-spacing: -.04em;
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+    .brand span {
+      display: block;
+      margin-top: 6px;
+      color: var(--taupe);
+      font-size: .72rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: .9rem;
+    }
+    .links a:hover { color: var(--ink); }
+    .dropdown { position: relative; display: flex; align-items: center; }
+    .dropdown-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .dropdown-toggle::after {
+      content: "⌄";
+      font-size: .9em;
+      line-height: 1;
+      transform: translateY(-1px);
+    }
+    .dropdown:hover .dropdown-toggle,
+    .dropdown:focus-within .dropdown-toggle { color: var(--ink); }
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 16px);
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      min-width: 240px;
+      padding: 10px;
+      border-radius: 18px;
+      background: rgba(255,253,248,.96);
+      border: 1px solid rgba(229,217,200,.9);
+      box-shadow: 0 22px 60px rgba(32,24,16,.16);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      opacity: 0;
+      pointer-events: none;
+      transition: .18s ease;
+    }
+    .dropdown:hover .dropdown-menu,
+    .dropdown:focus-within .dropdown-menu {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    .dropdown-menu a {
+      display: block;
+      padding: 11px 12px;
+      border-radius: 12px;
+      color: var(--ink);
+      font-weight: 750;
+      line-height: 1.2;
+    }
+    .dropdown-menu a:hover {
+      background: #f3e6d5;
+      color: var(--taupe-dark);
+    }
+    .dropdown-menu span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 600;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      cursor: pointer;
+      transition: .2s ease;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      color: #fff;
+      background: var(--taupe);
+      box-shadow: 0 16px 34px rgba(106, 71, 42, .24);
+    }
+    .btn-primary:hover { background: var(--taupe-dark); }
+    .btn-outline {
+      background: rgba(255,255,255,.72);
+      border-color: rgba(106, 71, 42, .28);
+    }
+    .btn-light {
+      background: #fff7e9;
+      color: var(--charcoal);
+      box-shadow: 0 10px 26px rgba(0,0,0,.18);
+    }
+
+    .hero { padding: 54px 0 72px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: .92fr 1.08fr;
+      gap: 44px;
+      align-items: center;
+    }
+    .hero-copy { min-width: 0; }
+    h1, h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 500;
+      letter-spacing: -.055em;
+    }
+    h1 {
+      margin: 0 0 18px;
+      font-size: clamp(2.35rem, 4.35vw, 4.15rem);
+      line-height: .98;
+      max-width: 620px;
+    }
+    .hero p {
+      margin: 0 0 28px;
+      max-width: 590px;
+      color: var(--muted);
+      font-size: clamp(1.08rem, 1.65vw, 1.28rem);
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .proof-line {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 8px;
+      color: var(--muted);
+      font-weight: 750;
+      font-size: .86rem;
+    }
+    .proof-line span {
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.6);
+      white-space: nowrap;
+    }
+
+    .hero-photo {
+      position: relative;
+      min-height: 640px;
+    }
+    .hero-photo-frame {
+      position: absolute;
+      inset: 0 0 104px 0;
+      border-radius: 42px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background: #ddd;
+    }
+    .hero-photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero-card {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 0;
+      padding: 22px;
+      border-radius: 26px;
+      background: rgba(255,253,248,.88);
+      border: 1px solid rgba(255,255,255,.78);
+      backdrop-filter: blur(18px) saturate(130%);
+      -webkit-backdrop-filter: blur(18px) saturate(130%);
+      box-shadow: 0 22px 60px rgba(32,24,16,.18);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+    }
+    .hero-card strong {
+      display: block;
+      margin-bottom: 5px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.55rem;
+      line-height: 1;
+      letter-spacing: -.035em;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .hero-card span {
+      display: block;
+      color: var(--muted);
+      font-size: .92rem;
+      font-weight: 700;
+    }
+    .hero-card-prices {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+    .hero-card-price {
+      min-width: 128px;
+      padding: 13px 14px;
+      border-radius: 18px;
+      background: #f3e6d5;
+      color: var(--taupe-dark);
+      text-align: center;
+      font-weight: 900;
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+    .hero-card-price small {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: .68rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    section { padding: 72px 0; }
+    .section-head {
+      max-width: 760px;
+      margin: 0 auto 34px;
+      text-align: center;
+    }
+    .section-head h2 {
+      margin: 0 0 12px;
+      font-size: clamp(2.25rem, 4.6vw, 4rem);
+      line-height: .95;
+    }
+    .section-head p {
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.06rem;
+      max-width: 640px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 18px 46px rgba(32,24,16,.075);
+    }
+    .card img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      background: #ddd;
+    }
+    .card-body { padding: 24px; }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+      letter-spacing: -.025em;
+    }
+    .card p { margin: 0; color: var(--muted); }
+
+    .statement {
+      background: var(--charcoal);
+      color: #fff7ea;
+      padding: 92px 0;
+    }
+    .statement-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+    .statement h2 {
+      margin: 0;
+      font-size: clamp(2.4rem, 5vw, 4.8rem);
+      line-height: .92;
+    }
+    .statement p {
+      margin: 0;
+      color: #dacbbb;
+      font-size: 1.15rem;
+      max-width: 560px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+    }
+    .gallery-grid img {
+      width: 100%;
+      object-fit: cover;
+      border-radius: 30px;
+      box-shadow: 0 18px 46px rgba(32,24,16,.1);
+      background: #ddd;
+    }
+    .gallery-main { height: 560px; }
+    .gallery-stack { display: grid; gap: 18px; }
+    .gallery-stack img { height: 271px; }
+    .gallery-stack img:only-child { height: 560px; }
+
+    .quote { padding-bottom: 90px; }
+    .quote-box {
+      display: grid;
+      grid-template-columns: .82fr 1.18fr;
+      gap: 26px;
+      background: var(--charcoal);
+      color: #fff7ea;
+      border-radius: 38px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+    .quote-copy h2 {
+      margin: 0 0 14px;
+      font-size: clamp(2.25rem, 4.8vw, 4.3rem);
+      line-height: .95;
+    }
+    .quote-copy p { margin: 0; color: #dacbbb; font-size: 1.05rem; }
+    form {
+      display: grid;
+      gap: 13px;
+      background: var(--paper);
+      color: var(--ink);
+      border-radius: 28px;
+      padding: 24px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    label {
+      display: grid;
+      gap: 6px;
+      font-weight: 800;
+      color: #362d24;
+      font-size: .9rem;
+    }
+    input, select, textarea {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid #ded2c2;
+      background: #fffdf9;
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--taupe);
+      box-shadow: 0 0 0 4px rgba(154,106,67,.14);
+    }
+    textarea { min-height: 108px; resize: vertical; }
+
+    footer {
+      background: #100d0a;
+      color: #d8c9ba;
+      padding: 34px 0;
+      font-size: .95rem;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    footer strong { color: #fff7ea; }
+    footer a { color: #fff7ea; }
+
+    @media (max-width: 1120px) {
+      .links { display: none; }
+      .hero-grid, .statement-grid, .quote-box, .gallery-grid { grid-template-columns: 1fr; }
+      .hero-photo { min-height: 540px; }
+      .cards { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .container { width: min(var(--max), calc(100% - 28px)); }
+      .nav { min-height: 66px; }
+      .brand { font-size: 1.05rem; }
+      .brand span { font-size: .64rem; letter-spacing: .13em; }
+      .nav > .btn { min-height: 40px; padding: 0 14px; font-size: .86rem; }
+
+      .hero { padding: 22px 0 48px; }
+      .hero-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        align-items: stretch;
+      }
+      .hero-photo {
+        order: 1;
+        min-height: 430px;
+        margin-top: 2px;
+      }
+      .hero-photo-frame {
+        inset: 0 0 128px 0;
+        border-radius: 28px;
+      }
+      .hero-card {
+        left: 12px;
+        right: 12px;
+        bottom: 0;
+        padding: 15px;
+        border-radius: 22px;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .hero-card strong {
+        font-size: 1.18rem;
+        margin-bottom: 4px;
+      }
+      .hero-card span {
+        font-size: .82rem;
+        line-height: 1.35;
+      }
+      .hero-card-prices {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .hero-card-price {
+        min-width: 0;
+        padding: 11px 10px;
+        font-size: .84rem;
+      }
+      .hero-card-price small { font-size: .6rem; }
+
+      .hero-copy {
+        order: 2;
+        text-align: center;
+      }
+      h1 {
+        margin: 0 auto 12px;
+        font-size: clamp(2.05rem, 9.7vw, 3rem);
+        line-height: .98;
+        max-width: 360px;
+      }
+      .hero p {
+        margin: 0 auto 18px;
+        max-width: 340px;
+        font-size: .98rem;
+        line-height: 1.48;
+      }
+      .hero-actions {
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .hero-actions .btn {
+        min-height: 44px;
+        padding: 0 16px;
+        font-size: .9rem;
+      }
+      .proof-line {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 7px;
+        font-size: .78rem;
+      }
+      .proof-line span { padding: 6px 9px; }
+
+      section { padding: 52px 0; }
+      .section-head h2 { font-size: clamp(2rem, 10vw, 3rem); }
+      .gallery-main, .gallery-stack img, .gallery-stack img:only-child { height: 280px; }
+      .form-row { grid-template-columns: 1fr; }
+      .quote-box { padding: 22px; border-radius: 30px; }
+      .footer-inner { align-items: flex-start; }
+    }
+  </style>
 </head>
+
 <body>
-
-<header class="header">
-  <div class="container nav">
-    <a class="brand" href="index.html">
-      Fresno Cabinet Company
-      <span>Est. 2021 • Fresno, CA</span>
-    </a>
-    <nav class="links" aria-label="Main navigation">
-      <a href="index.html" aria-current="page">Home</a>
-      <div class="dropdown">
-        <a class="dropdown-toggle" href="kitchen-cabinets.html">Cabinets</a>
-        <div class="dropdown-menu" aria-label="Cabinet pages">
-          <a href="kitchen-cabinets.html">Kitchen Cabinets<span>Full kitchen packages</span></a>
-          <a href="adu-packages.html">ADU Cabinets<span>Compact kitchens and guest spaces</span></a>
-          <a href="built-in-cabinets.html">Built-In Cabinets<span>Storage, media walls, office, and more</span></a>
-          <a href="in-home-design.html">Custom Design Help<span>Layouts, drawers, shelves, and options</span></a>
-        </div>
-      </div>
-      <a href="in-home-design.html">In-Home Design</a>
-      <a href="gallery.html">Gallery</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-    <a class="btn btn-primary" href="contact.html">Get a Quote</a>
-  </div>
-</header>
-
-<main id="top">
-  <section class="hero">
-    <div class="container hero-grid">
-      <div>
-        <h1>Designer cabinets. Smarter pricing.</h1>
-        <p>Designer-style cabinet packages for Fresno kitchens, ADUs, investment properties, and contractor projects. Schedule a free consultation and custom design quote.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="contact.html">Free Consultation</a>
-          <a class="btn btn-outline" href="gallery.html">View Gallery</a>
-        </div>
-        <div class="proof-line">
-          <span>Custom-style look</span>
-          <span>Free consultation</span>
-          <span>Custom design help</span>
-        </div>
-      </div>
-      <div class="hero-photo" aria-label="Featured kitchen cabinet package">
-        <div class="hero-photo-frame">
-          <img src="assets/img/home-hero.jpg" alt="Light kitchen cabinets with a refined finished look" />
-        </div>
-        <div class="hero-card">
-          <div>
-            <strong>Full kitchen packages.</strong>
-            <span>Share your layout, inspiration, or measurements — or schedule a free consultation.</span>
-          </div>
-          <div class="hero-card-prices" aria-label="Starting package pricing">
-            <div class="hero-card-price">From $4,950<small>Kitchen</small></div>
-            <div class="hero-card-price">From $2,995<small>ADU</small></div>
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="#top">
+        Fresno Cabinet Company
+        <span>Est. 2021 • Fresno, CA</span>
+      </a>
+      <nav class="links" aria-label="Main navigation">
+        <a href="#top">Home</a>
+        <div class="dropdown">
+          <a class="dropdown-toggle" href="#packages">Cabinets</a>
+          <div class="dropdown-menu" aria-label="Cabinet pages">
+            <a href="kitchen-cabinets.html">Kitchen Cabinets<span>Full kitchen packages</span></a>
+            <a href="adu-packages.html">ADU Cabinets<span>Compact kitchens and guest spaces</span></a>
+            <a href="built-in-cabinets.html">Built-In Cabinets<span>Storage, media walls, office, and more</span></a>
+            <a href="in-home-design.html">Custom Design Help<span>Layouts, drawers, shelves, and options</span></a>
           </div>
         </div>
-      </div>
+        <a href="in-home-design.html">In-Home Design</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="#quote">Contact</a>
+      </nav>
+      <a class="btn btn-primary" href="#quote">Get a Quote</a>
     </div>
-  </section>
+  </header>
 
-  <section id="packages">
-    <div class="container">
-      <div class="section-head">
-        <h2>Refined. Elegant. Timeless.</h2>
-        <p>Cabinet styles with clean lines, thoughtful details, and a finished look that makes the whole kitchen feel elevated.</p>
-      </div>
-      <div class="cards">
-        <article class="card">
-          <img src="assets/img/kitchen-hero.jpg" alt="Light full kitchen cabinet project" />
-          <div class="card-body">
-            <h3>Kitchen Remodels</h3>
-            <p>Warm, refined cabinetry designed to make the heart of the home feel beautifully finished.</p>
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <h1>Designer cabinets. Smarter pricing.</h1>
+          <p>Designer-style cabinet packages for Fresno kitchens, ADUs, investment properties, and contractor projects. Schedule a free consultation and custom design quote.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#quote">Free Consultation</a>
+            <a class="btn btn-outline" href="#packages">View Cabinets</a>
           </div>
-        </article>
-        <article class="card">
-          <img src="assets/img/adu-hero.jpg" alt="Compact cabinet run for smaller kitchen spaces" />
-          <div class="card-body">
-            <h3>ADU Cabinets</h3>
-            <p>Compact kitchens with a refined finish for guest houses, studios, and smaller spaces.</p>
+          <div class="proof-line">
+            <span>Custom-style look</span>
+            <span>Free consultation</span>
+            <span>Custom design help</span>
           </div>
-        </article>
-        <article class="card">
-          <img src="assets/img/built-in-hero.jpg" alt="Built-in cabinet wall with storage and display shelves" />
-          <div class="card-body">
-            <h3>Built-Ins</h3>
-            <p>Living room, office, storage, and media wall cabinet ideas that make a room feel complete.</p>
+        </div>
+
+        <div class="hero-photo" aria-label="Featured kitchen cabinet package">
+          <div class="hero-photo-frame">
+            <img src="assets/img/home-hero.jpg" alt="Bright kitchen with white shaker cabinets and a large island" />
           </div>
-        </article>
+
+          <div class="hero-card">
+            <div>
+              <strong>Full kitchen packages.</strong>
+              <span>Share your layout, inspiration, or measurements — or schedule a free consultation.</span>
+            </div>
+            <div class="hero-card-prices" aria-label="Starting package pricing">
+              <div class="hero-card-price">From $4,950<small>Kitchen</small></div>
+              <div class="hero-card-price">From $2,995<small>ADU</small></div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="statement">
-    <div class="container statement-grid">
-      <h2>Luxury-inspired cabinets. Designed for real budgets.</h2>
-      <p>Get the refined look and finished feel of a custom cabinet project, with thoughtful design help and package pricing that keeps the project within reach.</p>
-    </div>
-  </section>
+    <section id="packages">
+      <div class="container">
+        <div class="section-head">
+          <h2>Cabinet packages with a refined custom feel.</h2>
+          <p>Simple, elevated options for kitchens that need to look finished, thoughtful, and high-end.</p>
+        </div>
 
-  <section>
-    <div class="container split">
-      <div class="copy">
-        <h2>Start with a free consultation.</h2>
-        <p>Tell us about your kitchen, or invite us out for a free consultation. We’ll help turn the space into a cabinet design that feels right for your home.</p>
-        <ul class="check-list">
-          <li>Kitchen cabinet packages and full kitchen layouts.</li>
-          <li>ADU kitchens and compact cabinet runs.</li>
-          <li>Built-ins, storage walls, and living room cabinet ideas.</li>
-          <li>Custom design help with drawers, shelves, finishes, and layout options.</li>
-        </ul>
+        <div class="cards">
+          <article class="card">
+            <img src="assets/img/kitchen-hero.jpg" alt="Finished kitchen cabinet remodel inspiration" />
+            <div class="card-body">
+              <h3>Kitchen Remodels</h3>
+              <p>Warm, refined cabinetry designed to make the heart of the home feel beautifully finished.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="assets/gallery/full/project-30.jpg" alt="Compact white cabinet kitchen inspiration" />
+            <div class="card-body">
+              <h3>ADU Kitchens</h3>
+              <p>Compact cabinet packages that still feel polished, intentional, and complete.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="assets/img/built-in-hero.jpg" alt="Built-in cabinet design inspiration" />
+            <div class="card-body">
+              <h3>Free Design Help</h3>
+              <p>We can come out, review the space, and help with a custom cabinet layout, including drawer and shelf options.</p>
+            </div>
+          </article>
+        </div>
       </div>
-      <div class="image-panel">
-        <img src="assets/img/home-card.jpg" alt="Finished cabinet project with light cabinetry" />
+    </section>
+
+    <section class="statement">
+      <div class="container statement-grid">
+        <h2>Luxury-inspired cabinets. Designed for real budgets.</h2>
+        <p>Get the refined look and finished feel of a custom cabinet project, with thoughtful design help and package pricing that keeps the project within reach.</p>
       </div>
+    </section>
+
+    <section id="gallery">
+      <div class="container">
+        <div class="section-head">
+          <h2>Refined. Elegant. Timeless.</h2>
+          <p>Cabinet styles with clean lines, thoughtful details, and a finished look that makes the whole kitchen feel elevated.</p>
+        </div>
+
+        <div class="gallery-grid">
+          <img class="gallery-main" src="assets/gallery/full/project-10.jpg" alt="White shaker kitchen cabinets with range hood" />
+          <div class="gallery-stack">
+            <img src="assets/gallery/full/project-23.jpg" alt="Elegant cabinet inspiration with a warm finished look" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quote" class="quote">
+      <div class="container">
+        <div class="quote-box">
+          <div class="quote-copy">
+            <h2>Start with a free consultation.</h2>
+            <p>Tell us about your kitchen, or invite us out for a free consultation. We’ll help turn the space into a cabinet design that feels right for your home.</p>
+          </div>
+
+          <form action="mailto:info@fresnocabinetcompany.com" method="post" enctype="text/plain">
+            <div class="form-row">
+              <label>Name<input name="name" autocomplete="name" required /></label>
+              <label>Phone <span style="font-weight:500;color:var(--muted);">optional</span><input name="phone" autocomplete="tel" /></label>
+            </div>
+            <label>Email<input type="email" name="email" autocomplete="email" required /></label>
+            <div class="form-row">
+              <label>
+                Project Type
+                <select name="project_type">
+                  <option value="">Select one</option>
+                  <option>Kitchen remodel</option>
+                  <option>ADU / guest house</option>
+                  <option>Investment property</option>
+                  <option>Contractor project</option>
+                  <option>Free in-home consultation</option>
+                  <option>Other</option>
+                </select>
+              </label>
+              <label>Project Location<input name="location" placeholder="Fresno, Clovis, Madera..." /></label>
+            </div>
+            <label>Project Details<textarea name="message" placeholder="Tell us what you need. Photos, plans, rough measurements, or a free consultation request all work." required></textarea></label>
+            <button class="btn btn-primary" type="submit">Send Quote Request</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div><strong>Fresno Cabinet Company</strong> — Est. 2021 in Fresno, CA.</div>
+      <div><a href="mailto:info@fresnocabinetcompany.com">info@fresnocabinetcompany.com</a></div>
     </div>
-  </section>
-</main>
-
-<footer>
-  <div class="container footer-inner">
-    <div><strong>Fresno Cabinet Company</strong> — Est. 2021 in Fresno, CA.</div>
-    <div><a href="mailto:info@fresnocabinetcompany.com">info@fresnocabinetcompany.com</a></div>
-  </div>
-</footer>
-
+  </footer>
 </body>
 </html>
