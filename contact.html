@@ -56,7 +56,7 @@
   <section class="contact-section">
     <div class="container contact-grid">
       <section class="form-card" id="form">
-        <form id="consultationForm" method="post" action="FORM_ENDPOINT_HERE" novalidate>
+        <form id="consultationForm" method="post" action="/api/lead" novalidate>
           <label>Name<input id="name" name="name" autocomplete="name" required /><span class="field-error" id="nameError" aria-live="polite"></span></label>
           <label>Email<input id="email" type="email" name="email" autocomplete="email" required /><span class="field-error" id="emailError" aria-live="polite"></span></label>
           <label>Phone<input id="phone" name="phone" autocomplete="tel" required /><span class="field-error" id="phoneError" aria-live="polite"></span></label>
@@ -78,7 +78,7 @@
   </div>
 </footer>
 <script>
-  const FORM_ENDPOINT = 'FORM_ENDPOINT_HERE';
+  const FORM_ENDPOINT = '/api/lead';
   const THANK_YOU_URL = '/thank-you.html';
   const form = document.getElementById('consultationForm');
   const submitButton = document.getElementById('submitButton');

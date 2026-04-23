@@ -165,7 +165,7 @@
       </div>
       <div class="home-form-wrap">
         <section class="form-card">
-          <form id="homeQuoteForm" method="post" action="FORM_ENDPOINT_HERE" novalidate>
+          <form id="homeQuoteForm" method="post" action="/api/lead" novalidate>
             <div class="form-row">
               <label>Name<input id="name" name="name" autocomplete="name" required /><span class="field-error" id="nameError" aria-live="polite"></span></label>
               <label>Phone <span style="font-weight:500;color:var(--muted);">optional</span><input id="phone" name="phone" autocomplete="tel" /><span class="field-error" id="phoneError" aria-live="polite"></span></label>
@@ -194,7 +194,7 @@
   </div>
 </footer>
 <script>
-  const FORM_ENDPOINT = 'FORM_ENDPOINT_HERE';
+  const FORM_ENDPOINT = '/api/lead';
   const THANK_YOU_URL = '/thank-you.html';
   const form = document.getElementById('homeQuoteForm');
   const submitButton = document.getElementById('submitButton');
