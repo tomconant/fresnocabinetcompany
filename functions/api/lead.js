@@ -109,18 +109,9 @@ async function sendViaZeptoMail(env, fields) {
         },
       },
     ],
-    reply_to: [
-      {
-        address: fields.email,
-        name: fields.name,
-      },
-    ],
     subject,
     htmlbody: buildHtmlBody(fields),
     textbody: buildTextBody(fields),
-    track_clicks: false,
-    track_opens: false,
-    client_reference: `lead-${Date.now()}`,
   };
 
   const response = await fetch('https://api.zeptomail.com/v1.1/email', {
@@ -128,7 +119,7 @@ async function sendViaZeptoMail(env, fields) {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': `Zoho-enczapikey ${apiKey}`,
+      'Authorization': `zoho-enczapikey ${apiKey}`,
     },
     body: JSON.stringify(payload),
   });
