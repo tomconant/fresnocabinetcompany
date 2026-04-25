@@ -79,11 +79,17 @@ function buildTextBody(fields) {
   ].join('\n');
 }
 
+function normalizeApiKey(raw) {
+  return String(raw || '')
+    .trim()
+    .replace(/^zoho-enczapikey\s+/i, '');
+}
+
 async function sendViaZeptoMail(env, fields) {
-  const apiKey = env.ZEPTOMAIL_API_KEY;
-  const fromEmail = env.ZEPTOMAIL_FROM_EMAIL;
-  const toEmail = env.LEAD_NOTIFICATION_EMAIL || DEFAULT_TO_EMAIL;
-  const fromName = env.ZEPTOMAIL_FROM_NAME || DEFAULT_FROM_NAME;
+  const apiKey = normalizeApiKey(env.ZEPTOMAIL_API_KEY);
+  const fromEmail = clean(env.ZEPTOMAIL_FROM_EMAIL);
+  const toEmail = clean(env.LEAD_NOTIFICATION_EMAIL) || DEFAULT_TO_EMAIL;
+  const fromName = clean(env.ZEPTOMAIL_FROM_NAME) || DEFAULT_FROM_NAME;
 
   if (!apiKey) {
     throw new Error('Missing ZEPTOMAIL_API_KEY secret.');
@@ -92,7 +98,7 @@ async function sendViaZeptoMail(env, fields) {
     throw new Error('Missing ZEPTOMAIL_FROM_EMAIL variable.');
   }
 
-  const subjectPrefix = env.LEAD_EMAIL_SUBJECT_PREFIX || 'New Website Lead';
+  const subjectPrefix = clean(env.LEAD_EMAIL_SUBJECT_PREFIX) || 'New Website Lead';
   const sourceLabel = fields.sourcePage === 'index.html' ? 'Homepage Quote' : 'Contact Form';
   const subject = `${subjectPrefix} - ${sourceLabel} - ${fields.name}`;
 
@@ -119,7 +125,7 @@ async function sendViaZeptoMail(env, fields) {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': `zoho-enczapikey ${apiKey}`,
+      'Authorization': `Zoho-enczapikey ${apiKey}`,
     },
     body: JSON.stringify(payload),
   });
