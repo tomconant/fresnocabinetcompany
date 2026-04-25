@@ -18,7 +18,7 @@ This is fine for local review, but before launch I recommend connecting the cont
 - Formspree
 - Basin
 - Tally
-- Cloudflare Worker + Resend/Mailgun/SendGrid
+- Cloudflare Worker + Resend/Mailgun/SendGrid.
 
 ## Phone number
 No phone number is included.
