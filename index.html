@@ -226,7 +226,7 @@
   const jsCheckField = document.getElementById('jsCheck');
   const pageLoadedAt = Date.now();
   if (formLoadedAtField) formLoadedAtField.value = String(pageLoadedAt);
-  if (jsCheckField) jsCheckField.value = 'enabled';
+  if (jsCheckField) jsCheckField.value = 'passed';
 
   function clearErrors() { Object.values(errors).forEach(el => el.textContent = ''); formStatus.textContent = ''; formStatus.classList.remove('is-error'); }
   function validateEmail(value) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()); }
@@ -331,7 +331,7 @@
     event.preventDefault();
     if (!validateForm()) return;
     const formData = new FormData(form);
-    if (shouldSilentlyDropSubmission(formData)) { window.location.href = THANK_YOU_URL; return; }
+    // Let the Cloudflare Function decide spam/bot filtering so valid leads are not dropped by browser-side rules.
     submitButton.disabled = true; formStatus.textContent = 'Sending your request...';
     try {
       const response = await fetch(FORM_ENDPOINT, { method: 'POST', headers: { 'Accept': 'application/json' }, body: formData });
