@@ -176,7 +176,13 @@
               <label>Project Location<input id="location" name="location" placeholder="Fresno, Clovis, Madera..." required /><span class="field-error" id="locationError" aria-live="polite"></span></label>
             </div>
             <label>Project Details<textarea id="message" name="message" placeholder="Tell us what you need. Photos, plans, rough measurements, or a consultation request all work." required></textarea><span class="field-error" id="messageError" aria-live="polite"></span></label>
-            <div class="hp-field" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off" /></label></div>
+            <div class="hp-field" aria-hidden="true">
+              <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+              <label>Company URL<input type="text" name="company_url" tabindex="-1" autocomplete="off" /></label>
+              <label>Fax<input type="text" name="fax_number" tabindex="-1" autocomplete="off" /></label>
+            </div>
+            <input type="hidden" name="form_loaded_at" id="formLoadedAt" value="" />
+            <input type="hidden" name="js_check" id="jsCheck" value="" />
             <input type="hidden" name="_subject" value="New Fresno Cabinet Company homepage quote request" />
             <input type="hidden" name="source_page" value="index.html" />
             <button class="btn btn-primary js-track-consultation" data-track-location="index_quote_form_submit" type="submit" id="submitButton">Send Quote Request</button>
@@ -215,19 +221,101 @@
     location: document.getElementById('locationError'),
     message: document.getElementById('messageError')
   };
+
+  const formLoadedAtField = document.getElementById('formLoadedAt');
+  const jsCheckField = document.getElementById('jsCheck');
+  const pageLoadedAt = Date.now();
+  if (formLoadedAtField) formLoadedAtField.value = String(pageLoadedAt);
+  if (jsCheckField) jsCheckField.value = 'enabled';
+
   function clearErrors() { Object.values(errors).forEach(el => el.textContent = ''); formStatus.textContent = ''; formStatus.classList.remove('is-error'); }
   function validateEmail(value) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()); }
   function validatePhone(value) { if (!value.trim()) return true; return value.replace(/\D/g, '').length >= 10; }
 
-  function shouldSilentlyDropSubmission(formData) {
-    const blockedTerms = ['robertphype'];
-    for (const value of formData.values()) {
-      if (typeof value !== 'string') continue;
-      const normalized = value.toLowerCase().replace(/\s+/g, '');
-      if (blockedTerms.some(term => normalized.includes(term))) return true;
-    }
-    return false;
+  const HONEYPOT_FIELDS = ['website', 'company_url', 'fax_number'];
+  const SPAM_PHRASES = [
+    'robertphype',
+    'seo',
+    'search engine optimization',
+    'rank on google',
+    'google ranking',
+    'increase your traffic',
+    'more traffic',
+    'backlink',
+    'link building',
+    'guest post',
+    'domain authority',
+    'ahrefs',
+    'semrush',
+    'website audit',
+    'web design',
+    'logo design',
+    'app development',
+    'digital marketing',
+    'social media marketing',
+    'lead generation',
+    'bulk email',
+    'whatsapp',
+    'telegram',
+    'crypto',
+    'casino',
+    'gambling',
+    'payday loan',
+    'investment opportunity',
+    'adult',
+    'viagra',
+    'cbd',
+    'i visited your website',
+    'your website has',
+    'quick question about your website',
+    'we can help your business',
+    'dear sir',
+    'sir/madam',
+    'kindly reply',
+    'negative reviews'
+  ];
+  function normalizeSpamText(value) {
+    return String(value || '')
+      .toLowerCase()
+      .replace(/[\u200B-\u200D\uFEFF]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
+  function countUrls(text) {
+    return (text.match(/\b(?:https?:\/\/|www\.|[a-z0-9-]+\.(?:com|net|org|info|biz|ru|cn|xyz|top|shop|site|online)\b)/gi) || []).length;
+  }
+  function countSpamPhrases(text) {
+    return SPAM_PHRASES.reduce((count, phrase) => count + (text.includes(phrase) ? 1 : 0), 0);
+  }
+  function shouldSilentlyDropSubmission(formData) {
+    if (HONEYPOT_FIELDS.some(name => String(formData.get(name) || '').trim() !== '')) return true;
+
+    let score = 0;
+    const allText = Array.from(formData.values()).filter(value => typeof value === 'string').join('\n');
+    const text = normalizeSpamText(allText);
+    const message = normalizeSpamText(formData.get('message'));
+    const name = normalizeSpamText(formData.get('name'));
+    const startedAt = Number(formData.get('form_loaded_at') || 0);
+    const secondsOnPage = startedAt ? (Date.now() - startedAt) / 1000 : 0;
+
+    if (!formData.get('js_check')) score += 2;
+    if (startedAt && secondsOnPage >= 0 && secondsOnPage < 3) score += 2;
+    if (message.length > 2500) score += 3;
+    if (name.length > 80 || /https?:\/\/|www\.|@/.test(name)) score += 3;
+    if (/(.)\1{12,}/.test(text)) score += 3;
+
+    const urlCount = countUrls(text);
+    if (urlCount >= 3) score += 5;
+    else if (urlCount >= 1 && /(seo|traffic|rank|website|marketing|backlink|guest post|promotion)/.test(text)) score += 4;
+
+    const phraseHits = countSpamPhrases(text);
+    if (phraseHits >= 3) score += 6;
+    else if (phraseHits === 2) score += 4;
+    else if (phraseHits === 1) score += 2;
+
+    return score >= 6;
+  }
+
   function validateForm() {
     clearErrors(); let valid = true;
     if (!fields.name.value.trim()) { errors.name.textContent = 'Please enter your name.'; valid = false; }
@@ -244,7 +332,6 @@
     if (!validateForm()) return;
     const formData = new FormData(form);
     if (shouldSilentlyDropSubmission(formData)) { window.location.href = THANK_YOU_URL; return; }
-    if ((formData.get('website') || '').trim() !== '') { formStatus.textContent = 'Unable to submit right now.'; formStatus.classList.add('is-error'); return; }
     submitButton.disabled = true; formStatus.textContent = 'Sending your request...';
     try {
       const response = await fetch(FORM_ENDPOINT, { method: 'POST', headers: { 'Accept': 'application/json' }, body: formData });
