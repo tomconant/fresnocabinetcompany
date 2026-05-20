@@ -70,10 +70,12 @@ function getSpamScore(formData, fields, request) {
   const hiddenTrapFields = [
     'website',
     'company',
+    'company_url',
     'url',
     'homepage',
     'address2',
     'fax',
+    'fax_number',
     'confirm_email'
   ];
 
@@ -127,7 +129,8 @@ function getSpamScore(formData, fields, request) {
     }
   }
 
-  const linkCount = countLinks(combinedText);
+  // Count links only in the submitted message. Otherwise normal email domains like gmail.com look like links.
+  const linkCount = countLinks(message);
   if (linkCount >= 1) score += 2;
   if (linkCount >= 2) score += 6;
   if (linkCount >= 4) score += 20;
@@ -161,13 +164,15 @@ function getSpamScore(formData, fields, request) {
   if (formLoadedAt) {
     const secondsOnPage = (Date.now() - formLoadedAt) / 1000;
     if (secondsOnPage >= 0 && secondsOnPage < 4) {
-      score += 6;
+      score += 4;
     }
   }
 
-  const jsCheck = clean(formData.get('js_check'));
-  if (jsCheck && jsCheck !== 'passed') {
-    score += 6;
+  const jsCheck = clean(formData.get('js_check')).toLowerCase();
+  // Accept both values because earlier HTML used 'enabled' and the revised HTML uses 'passed'.
+  // Do not block solely for a missing value because bots can post directly and old cached pages may omit it.
+  if (jsCheck && !['passed', 'enabled', 'true', '1'].includes(jsCheck)) {
+    score += 4;
   }
 
   // Bad origin/referrer. Do not penalize missing headers because some browsers/extensions strip them.
@@ -317,8 +322,8 @@ export async function onRequestPost(context) {
 
     const spamScore = getSpamScore(formData, fields, context.request);
 
-    if (spamScore >= 8) {
-      console.log(`Spam lead silently dropped. Score: ${spamScore}`);
+    if (spamScore >= 10) {
+      console.log(`Spam lead silently dropped. Score: ${spamScore}; source: ${fields.sourcePage}; email: ${fields.email}`);
       return fakeSuccess();
     }
 
