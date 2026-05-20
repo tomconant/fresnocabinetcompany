@@ -88,6 +88,16 @@
   function clearErrors() { Object.values(errors).forEach(el => el.textContent = ''); formStatus.textContent = ''; formStatus.classList.remove('is-error'); }
   function validateEmail(value) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()); }
   function validatePhone(value) { return value.replace(/\D/g, '').length >= 10; }
+
+  function shouldSilentlyDropSubmission(formData) {
+    const blockedTerms = ['robertphype'];
+    for (const value of formData.values()) {
+      if (typeof value !== 'string') continue;
+      const normalized = value.toLowerCase().replace(/\s+/g, '');
+      if (blockedTerms.some(term => normalized.includes(term))) return true;
+    }
+    return false;
+  }
   function validateForm() {
     clearErrors(); let valid = true;
     if (!fields.name.value.trim()) { errors.name.textContent = 'Please enter your name.'; valid = false; }
@@ -102,6 +112,7 @@
     event.preventDefault();
     if (!validateForm()) return;
     const formData = new FormData(form);
+    if (shouldSilentlyDropSubmission(formData)) { window.location.href = THANK_YOU_URL; return; }
     if ((formData.get('website') || '').trim() !== '') { formStatus.textContent = 'Unable to submit right now.'; formStatus.classList.add('is-error'); return; }
     submitButton.disabled = true; formStatus.textContent = 'Sending your request...';
     try {

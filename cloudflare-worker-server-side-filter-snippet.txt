@@ -1,0 +1,18 @@
+Add this inside your /api/lead Worker after you build formData and before ZeptoMail/email sending:
+
+function shouldSilentlyDropLead(formData) {
+  const blockedTerms = ['robertphype'];
+  for (const value of formData.values()) {
+    if (typeof value !== 'string') continue;
+    const normalized = value.toLowerCase().replace(/\s+/g, '');
+    if (blockedTerms.some(term => normalized.includes(term))) return true;
+  }
+  return false;
+}
+
+if (shouldSilentlyDropLead(formData)) {
+  return new Response(JSON.stringify({ ok: true }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
