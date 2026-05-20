@@ -11,6 +11,10 @@ function json(data, status = 200) {
   });
 }
 
+function fakeSuccess() {
+  return json({ ok: true });
+}
+
 function escapeHtml(value = '') {
   return String(value)
     .replace(/&/g, '&amp;')
@@ -30,6 +34,164 @@ function isValidEmail(value) {
 
 function normalizePhone(value) {
   return clean(value);
+}
+
+function countLinks(text) {
+  const matches = String(text || '').match(
+    /\b(?:https?:\/\/|www\.|[a-z0-9-]+\.(?:com|net|org|info|biz|co|io|ru|cn|top|xyz|click|site|online)\b)/gi
+  );
+  return matches ? matches.length : 0;
+}
+
+function hasExcessiveRepeatingText(text) {
+  const value = String(text || '').toLowerCase();
+
+  if (/(.)\1{8,}/.test(value)) return true;
+
+  const words = value
+    .replace(/[^\w\s]/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (words.length < 12) return false;
+
+  const counts = {};
+  for (const word of words) {
+    counts[word] = (counts[word] || 0) + 1;
+    if (word.length > 3 && counts[word] >= 6) return true;
+  }
+
+  return false;
+}
+
+function getSpamScore(formData, fields, request) {
+  let score = 0;
+
+  const hiddenTrapFields = [
+    'website',
+    'company',
+    'url',
+    'homepage',
+    'address2',
+    'fax',
+    'confirm_email'
+  ];
+
+  for (const trap of hiddenTrapFields) {
+    if (clean(formData.get(trap))) {
+      score += 50;
+    }
+  }
+
+  const combinedText = [
+    fields.name,
+    fields.email,
+    fields.phone,
+    fields.projectType,
+    fields.location,
+    fields.message,
+    fields.sourcePage
+  ].join(' ');
+
+  const message = fields.message || '';
+  const name = fields.name || '';
+  const email = fields.email || '';
+  const emailDomain = email.includes('@') ? email.split('@').pop() : '';
+
+  const spamPatterns = [
+    // Known spammer / fake-name pattern
+    [/robert\s*phype/i, 20],
+
+    // SEO / backlink spam
+    [/\bseo\b|search engine optimization|backlinks?|link[-\s]?building|guest\s+post|domain authority|organic traffic|website traffic|google ranking|rank(?:ing)?\s+(?:your|on|higher)|first page of google/i, 10],
+
+    // Marketing/service spam
+    [/web(?:site)? design|web development|app development|digital marketing|marketing agency|social media marketing|lead generation|cold email|email marketing|content marketing/i, 8],
+
+    // Obvious junk industries
+    [/casino|gambling|crypto|bitcoin|forex|payday loan|debt relief|debt consolidation|viagra|cialis|porn|escort|adult dating/i, 20],
+
+    // Generic spam language
+    [/dear\s+(sir|madam|admin|webmaster)|hello\s+(sir|admin|webmaster)|i noticed (your|that your) website|we can help your business|boost your business|increase your sales|more traffic to your website/i, 6],
+
+    // Messaging app spam
+    [/whatsapp|telegram|skype|t\.me\//i, 5],
+
+    // HTML/script injection
+    [/<script|<\/script|<iframe|<\/iframe|<a\s+href|<\/a>/i, 15]
+  ];
+
+  for (const [pattern, points] of spamPatterns) {
+    if (pattern.test(combinedText)) {
+      score += points;
+    }
+  }
+
+  const linkCount = countLinks(combinedText);
+  if (linkCount >= 1) score += 2;
+  if (linkCount >= 2) score += 6;
+  if (linkCount >= 4) score += 20;
+
+  if (message.length > 3000) score += 8;
+  if (message.length > 8000) score += 25;
+
+  if (hasExcessiveRepeatingText(combinedText)) {
+    score += 10;
+  }
+
+  const lettersOnly = message.replace(/[^a-zA-Z]/g, '');
+  const uppercaseOnly = message.replace(/[^A-Z]/g, '');
+  if (lettersOnly.length > 40 && uppercaseOnly.length / lettersOnly.length > 0.75) {
+    score += 4;
+  }
+
+  // Weird fake-name patterns. Not enough alone to block, but contributes.
+  if (/\d/.test(name)) score += 6;
+  if (name.length > 45) score += 5;
+  if (/^[A-Za-z]{12,}$/.test(name) && !/\s/.test(name)) score += 4;
+  if (/^[A-Z][a-z]+[A-Z][a-z]+$/.test(name)) score += 4;
+
+  // Suspicious email TLDs. Not enough alone to block.
+  if (/\.(ru|cn|top|xyz|click|buzz|work|icu|rest)$/i.test(emailDomain)) {
+    score += 4;
+  }
+
+  // If your updated HTML sends these, use them. Do not require them because old cached pages may not have them.
+  const formLoadedAt = Number(clean(formData.get('form_loaded_at')));
+  if (formLoadedAt) {
+    const secondsOnPage = (Date.now() - formLoadedAt) / 1000;
+    if (secondsOnPage >= 0 && secondsOnPage < 4) {
+      score += 6;
+    }
+  }
+
+  const jsCheck = clean(formData.get('js_check'));
+  if (jsCheck && jsCheck !== 'passed') {
+    score += 6;
+  }
+
+  // Bad origin/referrer. Do not penalize missing headers because some browsers/extensions strip them.
+  const origin = request.headers.get('Origin') || '';
+  const referer = request.headers.get('Referer') || '';
+
+  const allowedHosts = [
+    'https://fresnocabinetcompany.com',
+    'https://www.fresnocabinetcompany.com'
+  ];
+
+  if (origin && !allowedHosts.some(host => origin.startsWith(host))) {
+    score += 10;
+  }
+
+  if (
+    referer &&
+    !allowedHosts.some(host => referer.startsWith(host)) &&
+    !referer.includes('.pages.dev')
+  ) {
+    score += 10;
+  }
+
+  return score;
 }
 
 function buildHtmlBody(fields) {
@@ -143,11 +305,6 @@ export async function onRequestPost(context) {
   try {
     const formData = await context.request.formData();
 
-    const website = clean(formData.get('website'));
-    if (website) {
-      return json({ ok: true, skipped: true });
-    }
-
     const fields = {
       name: clean(formData.get('name')),
       email: clean(formData.get('email')),
@@ -157,6 +314,13 @@ export async function onRequestPost(context) {
       message: clean(formData.get('message')),
       sourcePage: clean(formData.get('source_page')) || 'unknown',
     };
+
+    const spamScore = getSpamScore(formData, fields, context.request);
+
+    if (spamScore >= 8) {
+      console.log(`Spam lead silently dropped. Score: ${spamScore}`);
+      return fakeSuccess();
+    }
 
     if (!fields.name) {
       return json({ ok: false, error: 'Please enter your name.' }, 400);
